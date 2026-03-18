@@ -28,9 +28,6 @@ namespace WpfApp1
                 .WithAutomaticReconnect()
                 .Build();
 
-            connection.Reconnected
-            connection.Reconnecting
-
             // регистрируем функцию Receive для получения данных
             connection.On<string, string>("Receive", (message, user) =>
             {
