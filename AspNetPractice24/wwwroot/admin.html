@@ -2,10 +2,10 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Site</title>
+    <title>Site - Admin</title>
 </head>
 <body>
-    <h2>User account</h2>
+    <h2>Administrator's personal cabinet</h2>
     <p><a href="logout">Exit</a></p>
     <div id="userForm">
         <p>
@@ -19,10 +19,15 @@
         <input type="button" id="sendBtn" value="Send" />
     </div>
 
+    <br />
+    <div id="adminForm">
+        <input type="text" id="notify" />
+        <input type="button" id="notifyBtn" value="Notification" />
+    </div>
+
     <div id="chatroom"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
-    <script>
-        const hubConnection = new signalR.HubConnectionBuilder()
+    <script>const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/chat")
             .build();
 
@@ -33,6 +38,12 @@
             hubConnection.invoke("Send", message, username)
                 .catch(error => console.error(error));
         });
+        // отправка сообщения от администратора
+        document.getElementById("notifyBtn").addEventListener("click", () => {
+            const message = document.getElementById("notify").value;
+            hubConnection.invoke("Notify", message);
+        });
+
         // получение сообщения от сервера
         hubConnection.on("Receive", (message, userName) => {
 
@@ -51,7 +62,6 @@
 
         hubConnection.start()
             .then(() => document.getElementById("sendBtn").disabled = false)
-            .catch((err) => console.error(err));
-    </script>
+            .catch((err) => console.error(err));</script>
 </body>
 </html>

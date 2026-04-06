@@ -22,14 +22,13 @@ namespace WpfApp1
         {
             InitializeComponent();
 
-            // создаем подключение к хабу
             connection = new HubConnectionBuilder()
                 .WithUrl("https://localhost:7120/chat")
                 .WithAutomaticReconnect()
                 .Build();
 
-            // регистрируем функцию Receive для получения данных
-            connection.On<string, string>("Receive", (message, user) =>
+            // Исправлен порядок параметров: сначала user, затем message
+            connection.On<string, string>("Receive", (user, message) =>
             {
                 Dispatcher.Invoke(() =>
                 {
@@ -71,3 +70,6 @@ namespace WpfApp1
         }
     }
 }
+
+
+
